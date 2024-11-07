@@ -1,15 +1,16 @@
+$WatchGoalMinutes = 60
 $Streamers = Get-Content -Path "Streamers.json" | ConvertFrom-Json
-while (($Streamers.WatchTime | Get-Unique) -ne "60") {
+while (($Streamers.WatchTime | Get-Unique) -ne $WatchGoalMinutes) {
     $Streamers = Get-Content -Path "Streamers.json" | ConvertFrom-Json
     foreach ($Streamer in $Streamers) {
-        if ($Streamer.WatchTime -gt 60) {
+        if ($Streamer.WatchTime -gt $WatchGoalMinutes) {
             Write-Host "$($Streamer.Name) has been watched for an hour. Skipping"
             Continue
         }
         $Response = Invoke-RestMethod -Method Get -Uri "https://www.twitch.tv/$($Streamer.Name)"
         if ($Response -match '"isLiveBroadcast":.*true') {
             Write-Host "$($Streamer.Name) is live. Starting to watch"
-            while ($Streamer.WatchTime -lt 60) {
+            while ($Streamer.WatchTime -lt $WatchGoalMinutes) {
                 Start-Sleep -Seconds 600
                 $Response = Invoke-RestMethod -Method Get -Uri "https://www.twitch.tv/$($Streamer.Name)"
                 if ($Response -match '"isLiveBroadcast":.*true') {
