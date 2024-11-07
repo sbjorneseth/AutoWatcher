@@ -1,4 +1,4 @@
-$WebBrowserPath = "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+$WebBrowserPath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
 $ProcessName = $WebBrowserPath.Split("\")[-1].Split(".")[0]
 $WatchGoalMinutes = 60
 $Streamers = Get-Content -Path "Streamers.json" | ConvertFrom-Json
