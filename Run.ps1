@@ -12,7 +12,7 @@ while (($Streamers.WatchTimeMinutes | Get-Unique) -ne $WatchGoalMinutes) {
             Write-Host "$($Streamer.Name) is live. Starting to watch"
             start-process chrome.exe "https://www.twitch.tv/$($Streamer.Name)"
             while ($Streamer.WatchTimeMinutes -lt $WatchGoalMinutes) {
-                Start-Sleep -Seconds 1
+                Start-Sleep -Seconds 60
                 $Response = Invoke-RestMethod -Method Get -Uri "https://www.twitch.tv/$($Streamer.Name)"
                 if ($Response -match '"isLiveBroadcast":.*true') {
                     Write-Host "$($Streamer.Name) is still live. Saving progress ($($Streamer.WatchTimeMinutes) minutes) and watching one more minute"
