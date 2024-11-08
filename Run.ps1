@@ -1,24 +1,24 @@
-$WebBrowserPath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
-$ProcessName = $WebBrowserPath.Split("\")[-1].Split(".")[0]
-$WatchGoalMinutes = 60
+$Settings = Get-Content -Path "Settings.jsonc" | ConvertFrom-Json
+$ProcessName = $Settings.BrowserFullPath.Split("\")[-1].Split(".")[0]
 $Streamers = Get-Content -Path "Streamers.json" | ConvertFrom-Json
-while (($Streamers.WatchTimeMinutes | Get-Unique) -ne $WatchGoalMinutes) {
+while (($Streamers.WatchTimeMinutes | Get-Unique) -ne $Settings.WatchTimeGoalMinutes) {
     $Streamers = Get-Content -Path "Streamers.json" | ConvertFrom-Json
     foreach ($Streamer in $Streamers) {
-        if ($Streamer.WatchTimeMinutes -ge $WatchGoalMinutes) {
-            Write-Host "$($Streamer.Name) has been watched for an hour. Skipping"
+        if ($Streamer.WatchTimeMinutes -ge $Settings.WatchTimeGoalMinutes) {
+            Write-Host "$($Streamer.Name) has been watched for $($Settings.WatchTimeGoalMinutes). Skipping"
             Continue
         }
         $Response = Invoke-RestMethod -Method Get -Uri "https://www.twitch.tv/$($Streamer.Name)"
         if ($Response -match '"isLiveBroadcast":.*true') {
             Write-Host "$($Streamer.Name) is live. Starting to watch"
-            start-process -FilePath $WebBrowserPath -ArgumentList "https://www.twitch.tv/$($Streamer.Name)"
-            while ($Streamer.WatchTimeMinutes -lt $WatchGoalMinutes) {
-                Start-Sleep -Seconds 60
+            start-process -FilePath $Settings.BrowserFullPath -ArgumentList "https://www.twitch.tv/$($Streamer.Name)"
+            while ($Streamer.WatchTimeMinutes -lt $Settings.WatchTimeGoalMinutes) {
+                Start-Sleep -Seconds ($Settings.UpdateIntervalMinutes * 60)
                 $Response = Invoke-RestMethod -Method Get -Uri "https://www.twitch.tv/$($Streamer.Name)"
                 if ($Response -match '"isLiveBroadcast":.*true') {
-                    Write-Host "$($Streamer.Name) is still live. Saving progress ($($Streamer.WatchTimeMinutes) minutes) and watching one more minute"
-                    $Streamer.WatchTimeMinutes = $Streamer.WatchTimeMinutes + 1
+                    $Streamer = Get-Content -Path "Streamers.json" | ConvertFrom-Json | Where-Object -FilterScript {$_.Name -eq $Streamer.Name}
+                    $Streamer.WatchTimeMinutes = $Streamer.WatchTimeMinutes + $Settings.UpdateIntervalMinutes
+                    Write-Host "$($Streamer.Name) is still live. Saving progress ($($Streamer.WatchTimeMinutes) minutes) and watching $($Settings.UpdateIntervalMinutes) more minute"
                     $Progress = Get-Content -Path "Streamers.json" | ConvertFrom-Json
                     # Update progress
                     $Progress | ForEach-Object {if ($_.Name -eq $Streamer.Name) {[pscustomobject]@{Name = $_.Name;WatchTimeMinutes = $Streamer.WatchTimeMinutes}}else{$_}} | ConvertTo-Json | Set-Content -Path "Streamers.json" -Force
