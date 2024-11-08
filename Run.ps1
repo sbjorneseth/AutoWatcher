@@ -2,7 +2,7 @@
 $Settings = Get-Content -Path "$PSScriptRoot\Settings.jsonc" | ConvertFrom-Json
 $ProcessName = $Settings.BrowserFullPath.Split("\")[-1].Split(".")[0]
 $Streamers = Get-Content -Path "$PSScriptRoot\Streamers.json" | ConvertFrom-Json
-while (($Streamers.WatchTimeMinutes | Get-Unique) -ne $Settings.WatchTimeGoalMinutes) {
+while ((($Streamers.WatchTimeMinutes | Get-Unique) -Join "") -ne $Settings.WatchTimeGoalMinutes) {
     $Streamers = Get-Content -Path "$PSScriptRoot\Streamers.json" | ConvertFrom-Json
     foreach ($Streamer in $Streamers) {
         if ($Streamer.WatchTimeMinutes -ge $Settings.WatchTimeGoalMinutes) {
