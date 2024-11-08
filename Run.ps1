@@ -1,3 +1,4 @@
+# This file is executed by right clicking and selecting "Run with PowerShell". Will loop until all streamers have been watched for the desired amount of time.
 $Settings = Get-Content -Path "Settings.jsonc" | ConvertFrom-Json
 $ProcessName = $Settings.BrowserFullPath.Split("\")[-1].Split(".")[0]
 $Streamers = Get-Content -Path "Streamers.json" | ConvertFrom-Json
