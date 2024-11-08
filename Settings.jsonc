@@ -1,7 +1,0 @@
-{
-    "WatchTimeGoalMinutes": 60, // How long you want to watch
-    "UpdateIntervalMinutes": 1, // How often progress is updated
-    // Remove or add "//" to remove or add the browser you want to use. Full path needed for the logic to work.
-    "BrowserFullPath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" // Chrome
-    //"BrowserFullPath": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe" // Edge
-}
