@@ -4,8 +4,8 @@ Automatically watches streamers based on the list from [Twitch Drops](https://tw
 ## How to Use
 1. Clone the repository.
 2. Define streamers in `Streamers.json`.
-3. If you are using a browser other than Chrome, update `Settings.jsonc` accordingly.
+3. If you are using a browser other than Chrome, update `Settings.json` accordingly.
 4. Right-click `Run.ps1` and select "Run with PowerShell".
 
 ## How It Works
-The script loops until `WatchTimeMinutes` (in `Streamers.json`) matches `WatchTimeGoalMinutes` (in `Settings.jsonc`) for every streamer in `Streamers.json`.
+The script loops until `WatchTimeMinutes` (in `Streamers.json`) matches `WatchTimeGoalMinutes` (in `Settings.json`) for every streamer in `Streamers.json`.
