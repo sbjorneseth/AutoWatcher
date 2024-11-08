@@ -8,4 +8,4 @@ Will automatically watch streamers based on this list https://twitch.facepunch.c
 4. Right click Run.ps1 and click "Run with PowerShell"
 
 ## How it works
-Loops until WatchTimeMinutes (Steamers.json) matches WatchTimeGoalMinutes (settings.jsonc) for every streamer in Streamers.json.
+Loops until WatchTimeMinutes (Steamers.json) matches WatchTimeGoalMinutes (Settings.jsonc) for every streamer in Streamers.json.

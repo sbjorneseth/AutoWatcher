@@ -29,6 +29,7 @@ while (($Streamers.WatchTimeMinutes | Get-Unique) -ne $Settings.WatchTimeGoalMin
                     break
                 }
             }
+            Write-Host "Watch goal reached for $($Streamer.Name)!" -ForegroundColor Green
             Get-Process -Name $ProcessName -ErrorAction SilentlyContinue | Stop-Process
             Continue
         }
